@@ -10,8 +10,10 @@ fn main() {
     let mut refresh_number = true;
 
     loop {
-        // Game Details
+
         println!("Guess the number! (Between {GUESS_RANGE_MIN} and {GUESS_RANGE_MAX})");
+
+        // Update Game's Guessing Number
         if refresh_number {
             to_guess_number = rand::thread_rng().gen_range(GUESS_RANGE_MIN..=GUESS_RANGE_MAX);
             refresh_number = false
