@@ -1,0 +1,1 @@
+pub fn utils_funny_fn() {}
