@@ -1,3 +1,8 @@
+#[derive(Debug, PartialEq)]
+pub enum ComparisonError {
+    MismatchedLength
+}
+
 pub struct Word {
     pub string: String,
 }
@@ -8,31 +13,41 @@ impl Word {
             string: string.clone()
         }
     }
-    pub fn compare_to(&self, word: &Word) -> Vec<Comparison> {
-        if self.string.len() != word.string.len() {panic!("Words must match length")}
+    pub fn compare_to(&self, word: &Word) -> Result<Vec<Comparison>, ComparisonError> {
+        if self.string.len() != word.string.len() {return Err(ComparisonError::MismatchedLength)}
         
         let mut results: Vec<Comparison> = Vec::new();
-
         let mut word_a_iter = self.string.chars();
         let mut word_b_iter = word.string.chars();
+        let mut remainder_chars: Vec<char> = word.string.chars().collect();
 
         loop {
-            let result_comparison: Comparison;
+            let current_comparison: Comparison;
 
             let char_a = match word_a_iter.next() {Some(ch) => ch, None => break};
             let char_b = match word_b_iter.next() {Some(ch) => ch, None => break};
             
-            if char_a == char_b { result_comparison = Comparison::Valid}
-            else { if word.string.contains(char_a) { result_comparison = Comparison::Exists}
-                else { result_comparison = Comparison::Invalid } }
+            if match remainder_chars.iter().position(|&e| e == char_a) {
+                Some(index) => {remainder_chars.remove(index); true},
+                None => false
+            } {
+                if char_a == char_b {
+                    current_comparison = Comparison::Valid
+                } else {
+                    current_comparison = Comparison::Exists
+                }
+            } else {
+                current_comparison = Comparison::Invalid
+            }
 
-            results.push(result_comparison)
+            results.push(current_comparison)
         }
 
-        results
+        return Ok(results)
     }
 }
 
+#[derive(Debug)]
 pub enum Comparison {
-    Invalid, Exists, Valid,
+    Invalid, Exists, Valid
 }

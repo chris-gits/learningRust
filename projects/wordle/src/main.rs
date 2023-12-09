@@ -1,17 +1,23 @@
-use std::slice::SliceIndex;
-
 mod wordle;
 
 fn main() {
-    let test_word_1 = wordle::Word::from_string(&String::from("asd"));
-    let test_word_2 = wordle::Word::from_string(&String::from("bsa"));
+    let test_word_guess = wordle::Word::from_string(&String::from("tiers"));
+    let test_word_answer = wordle::Word::from_string(&String::from("start"));
     
-    let cmp_res = test_word_1.compare_to(&test_word_2);
-
-    for (i, c) in cmp_res.into_iter().enumerate() {
-        println!("{} => {} : {}",
-            test_word_1.string.get(i).unwrap()
-        )
+    let comp_res = test_word_guess.compare_to(&test_word_answer);
+    match comp_res {
+        Ok(comp_vec) => {
+            for comp in comp_vec {
+                println!("{:?}", comp)
+            }
+        },
+        Err(error) => {
+            if error == wordle::ComparisonError::MismatchedLength {
+                println!("Words' lengths do not match.")
+            } else {
+                println!("Errored with \"{:?}\"", error)
+            }
+        },
     }
 
 }
