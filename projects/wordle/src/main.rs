@@ -1,25 +1,50 @@
+use rand::seq::{SliceChooseIter, SliceRandom};
+
 mod wordle;
 
 fn main() {
-    let test_word_guess = wordle::Word::from_string(&String::from("tiers"));
-    let test_word_answer = wordle::Word::from_string(&String::from("start"));
-    
-    let comp_res = test_word_guess.compare_to(&test_word_answer);
-    match comp_res {
-        Ok(comp_vec) => {
-            for comp in comp_vec {
-                println!("{:?}", comp)
-            }
-        },
-        Err(error) => {
-            if error == wordle::ComparisonError::MismatchedLength {
-                println!("Words' lengths do not match.")
-            } else {
-                println!("Errored with \"{:?}\"", error)
-            }
-        },
-    }
 
+    let mut rng = rand::thread_rng();
+
+    let words_list_main: Vec<wordle::Word> = String::from_utf8(
+            std::fs::read("./src/words/main.txt")
+            .unwrap())
+        .unwrap()
+        .split('\n')
+        .into_iter()
+        .map(|e| wordle::Word::from_string(&String::from(e)))
+        .collect();
+    let words_list_valid: Vec<wordle::Word> = String::from_utf8(
+        std::fs::read("./src/words/valid.txt")
+        .unwrap())
+    .unwrap()
+    .split('\n')
+    .into_iter()
+    .map(|e| wordle::Word::from_string(&String::from(e)))
+    .collect();
+
+    let mut game_active = true;
+    while game_active {
+
+        let mut round_active = true;
+        let mut round_word: &wordle::Word;
+        let mut round_input: String;
+
+        while round_active {
+
+            let round_word = words_list_main.choose(&mut rng).unwrap();
+
+            println!("Current round's word is {}.", round_word.string);
+            
+            round_input = String::new();
+            std::io::stdin().read_line(&mut round_input).unwrap();
+            round_input = round_input.trim().into();
+
+            println!("{round_input}");
+
+        }
+
+    }
 }
 
 // fn main () {
