@@ -1,8 +1,4 @@
-#[derive(Debug, PartialEq)]
-pub enum ComparisonError {
-    MismatchedLength
-}
-
+#[derive(PartialEq)]
 pub struct Word {
     pub string: String,
 }
@@ -13,9 +9,8 @@ impl Word {
             string: string.clone()
         }
     }
-    pub fn compare_to(&self, word: &Word) -> Result<Vec<Comparison>, ComparisonError> {
-        if self.string.len() != word.string.len() {return Err(ComparisonError::MismatchedLength)}
-        
+    pub fn compare_to(&self, word: &Word) -> Vec<Comparison> {
+
         let mut results: Vec<Comparison> = Vec::new();
         let mut word_a_iter = self.string.chars();
         let mut word_b_iter = word.string.chars();
@@ -43,11 +38,11 @@ impl Word {
             results.push(current_comparison)
         }
 
-        return Ok(results)
+        return results
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Comparison {
     Invalid, Exists, Valid
 }
