@@ -2,7 +2,7 @@
 
 A self managed repo to track my progress learning Rust.
 
-### Information
+### Objectives
 
 My primary objectives of this repo are to:
 
@@ -10,6 +10,8 @@ My primary objectives of this repo are to:
     - Develop my understanding of lower-leveled programming
     - Learn how to manipulate and handle memory
     - Adjust to using commits and branches in projects
+
+### Notes
 
 Some quick notes:
 
