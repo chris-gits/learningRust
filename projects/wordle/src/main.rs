@@ -32,6 +32,7 @@ fn main() {
     let mut round_number: u32 = 0;
     let mut round_guesses: u32 = 0;
     let mut round_comparison = Vec::<wordle::Comparison>::new();
+    let mut round_letters_left: String;
 
     let mut input_active = true;
     let mut input_string = String::new();
@@ -44,12 +45,13 @@ fn main() {
         round_word = words_list_main.choose(&mut rng).unwrap();
         round_number += 1;
         round_guesses = 0;
+        round_letters_left = "abcdefghijklmnopqrstuvwxyz".into();
 
         println!("{} {} {} {}",
-        "~~~".italic(),
+        "~~~~~".italic(),
         "Round".bold(),
         round_number.to_string().green().bold(),
-        "~~~".italic()
+        "~~~~~".italic()
         );
 
         round_active = true;
@@ -58,8 +60,10 @@ fn main() {
             input_active = true; 
             while input_active {
 
-                print!("Guess a word {} -> ",
-                    format!("(Attempt {}/{})", round_guesses+1, MAX_GUESSES).underline());
+                print!("Guess a word {} {} \n-> ",
+                    format!("(Attempt {}/{})", round_guesses+1, MAX_GUESSES).underline(),
+                    round_letters_left.bold()
+                    );
                 std::io::Write::flush(&mut std::io::stdout()).unwrap();
                 input_string = String::new();
                 std::io::stdin().read_line(&mut input_string).unwrap();
@@ -86,7 +90,8 @@ fn main() {
                     match round_comparison[char_i] {
                         wordle::Comparison::Valid => {print!("{}", input_string_chars[char_i].to_string().on_green())},
                         wordle::Comparison::Exists => {print!("{}", input_string_chars[char_i].to_string().on_yellow())},
-                        wordle::Comparison::Invalid => {print!("{}", input_string_chars[char_i].to_string())},
+                        wordle::Comparison::Invalid => {print!("{}", input_string_chars[char_i].to_string());
+                            round_letters_left = round_letters_left.replace(input_string_chars[char_i], "")},
                     }
                 }
             }
