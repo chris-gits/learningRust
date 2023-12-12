@@ -14,7 +14,7 @@ fn main() {
     .unwrap()
     .split('\n')
     .into_iter()
-    .map(|e| wordle::Word::from_string(&String::from(e)))
+    .map(|e| wordle::Word::from_string(&String::from(e.trim())))
     .collect();
     let words_list_valid: Vec<wordle::Word> = String::from_utf8(
     std::fs::read("./src/words/valid.txt")
@@ -22,7 +22,7 @@ fn main() {
     .unwrap()
     .split('\n')
     .into_iter()
-    .map(|e| wordle::Word::from_string(&String::from(e)))
+    .map(|e| wordle::Word::from_string(&String::from(e.trim())))
     .collect();
 
     let mut game_active = true;
